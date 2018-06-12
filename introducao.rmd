@@ -1,0 +1,42 @@
+---
+title: "Introdução ao R! para Jornalistas"
+author: "Manoel Galdino e Jessica Voigt"
+date: "12 de junho de 2018"
+output: html_document
+---
+
+# Introdução ao R! para jornalistas
+
+## Início
+
+Essa é o tutorial para o curso de R! para Jornalistas. Ao longo do dia, vocês irão aprender a:
+
+* Importar planilhas em formatos .xlsx (Excel) .odt (LibreOffice) e .csv no R!
+* Manipular dados no R! utilizando os pacotes *dplyr*
+* Criar tabelas e visualizações com os pacotes *dplyr* e *tidyr*
+* Exportar planilhas nos diferentes formatos.
+
+## Primeiros passos
+
+Antes de começarmos, precisamos entender algumas coisas sobre o R:
+
+### 1 **O que é uma linguagem?**
+
+Quando falamos que *R é uma linguagem* queremos dizer que através do R utilizamos uma forma específica para nos comunicarmos com o computador. Através dessa linguagem podemos fazer perguntas e comandos para o computador, e ele nos dirá a resposta.
+
+**Computadores não são inteligentes, eles são bons para observar padrões.**
+
+Imagine que temos uma pequena tabela com algumas informações:
+
+```{r, echo = F}
+library(knitr)
+library(dplyr)
+
+df1 <- data.frame(Nome = c("Monica", "Ross", "Rachel"),
+                  Bananas = c(1,2,5),
+                  'Maças' = c(3, 8, 2))
+kable(df1)
+
+
+```
+
