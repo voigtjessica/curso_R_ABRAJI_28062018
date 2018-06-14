@@ -28,15 +28,21 @@ Quando falamos que *R é uma linguagem* queremos dizer que através do R utiliza
 
 Imagine que temos uma pequena tabela com algumas informações:
 
-```{r, echo = F}
+```{r, echo=F}
 library(knitr)
 library(dplyr)
 
-df1 <- data.frame(Nome = c("Monica", "Ross", "Rachel"),
+df1 <- data.frame(Nome = c("Mônica", "Ross", "Rachel"),
                   Bananas = c(1,2,5),
-                  'Maças' = c(3, 8, 2))
-kable(df1)
+                  Peras = c(3, 8, 2),
+                  Cenouras= c(5, 7, 0))
+
+kable(df1, caption="Lista de compras",align="cr")
 
 
 ```
+
+Podemos fazer algumas perguntas sobre os dados acima como "quantos itens cada um comprou" ou "quem levou mais legumas do que frutas". Você conseguiria responder essa pergunta sem nenhum problema. Agora, quando nos deparamos com os itens comprados em todas as lojas de uma rede de supermercados, a conta fica mais difícil.
+
+Além disso, precisamos de um método **seguro** para manipular esses dados. Já imaginou, por um erro de digitação, apagar alguma célula importante em uma planilha? Ou fazer uma manipulação equivocada e não ter como resgatar a versão anterior? O R! previne contra todas essas situações.
 
