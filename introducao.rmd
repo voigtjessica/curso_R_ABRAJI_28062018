@@ -5,44 +5,178 @@ date: "12 de junho de 2018"
 output: html_document
 ---
 
-# Introdução ao R! para jornalistas
-
 ## Início
 
 Essa é o tutorial para o curso de R! para Jornalistas. Ao longo do dia, vocês irão aprender a:
 
-* Importar planilhas em formatos .xlsx (Excel) .odt (LibreOffice) e .csv no R!
-* Manipular dados no R! utilizando os pacotes *dplyr*
-* Criar tabelas e visualizações com os pacotes *dplyr* e *tidyr*
-* Exportar planilhas nos diferentes formatos.
+    1. Importar planilhas em formatos .xlsx (Excel) .odt (LibreOffice) e .csv no R!
+    2. Manipular dados no R! utilizando os pacotes *dplyr*
+    3. Criar tabelas e visualizações com os pacotes *dplyr* e *tidyr*
+    4. Exportar planilhas nos diferentes formatos.
+
 
 ## Primeiros passos
 
 Antes de começarmos, precisamos entender algumas coisas sobre o R:
 
-### 1 **O que é uma linguagem?**
+
+### O que é uma linguagem?
 
 Quando falamos que *R é uma linguagem* queremos dizer que através do R utilizamos uma forma específica para nos comunicarmos com o computador. Através dessa linguagem podemos fazer perguntas e comandos para o computador, e ele nos dirá a resposta.
 
 **Computadores não são inteligentes, eles são bons para observar padrões.**
 
+Importante: sempre verifique se você digitou *corretamente* as funções no R! . Muitos dos problemas enfrentados pelos usuários todos os dias tem a ver com simples erros de digitação. 
+
 Imagine que temos uma pequena tabela com algumas informações:
 
-```{r, echo=F}
+```{r, echo=F, eval=TRUE, warning=F, message=F}
 library(knitr)
 library(dplyr)
+library(kableExtra)
 
-df1 <- data.frame(Nome = c("Mônica", "Ross", "Rachel"),
-                  Bananas = c(1,2,5),
-                  Peras = c(3, 8, 2),
-                  Cenouras= c(5, 7, 0))
+df1 <- data.frame(Alimento = c("Bananas", "Pêras", "Cenouras"),
+                  Monica = c(1,2,5),
+                  Ross = c(3, 8, 2),
+                  Rachel= c(5, 7, 0))
 
-kable(df1, caption="Lista de compras",align="cr")
-
-
+df1 %>%
+  kable() %>%
+  kable_styling()
 ```
 
 Podemos fazer algumas perguntas sobre os dados acima como "quantos itens cada um comprou" ou "quem levou mais legumas do que frutas". Você conseguiria responder essa pergunta sem nenhum problema. Agora, quando nos deparamos com os itens comprados em todas as lojas de uma rede de supermercados, a conta fica mais difícil.
 
-Além disso, precisamos de um método **seguro** para manipular esses dados. Já imaginou, por um erro de digitação, apagar alguma célula importante em uma planilha? Ou fazer uma manipulação equivocada e não ter como resgatar a versão anterior? O R! previne contra todas essas situações.
 
+### Por quê usar o R? 
+
+    1. Método Seguro
+    2. Rapidez
+    3. Possui uma grande comunidade
+    
+    
+Vamos começar?
+
+Caso prefira, acesse diretamente o script desta aula.
+
+
+### R e Rstudio
+
+O R é uma linguagem de programação voltada para análise de dados. O Rstudio é uma IDE (interface de desenvolvimento), que nos ajuda a programar em R. No curso utilizaremos o Rstudio para facilitar programar em R.
+
+O **script** é a parte superior esquerda da tela, ele serve para que você escreva e armazene o código para verificação posterior. Essa é uma das maiores vantagens de se usar o R, pois você pode verificar o que você fez e corrigir eventuais erros que tenha cometido. 
+
+Normalmente, iremos escrever um comando no Script, clicar em executar (run) ou apertar ctrl + enter, e o Rstudio vai copiar o comando, colar no console e executá-los para nós. Caso utilizemos a interface do RStudio, como por exemplo para importar um dataframe, procure sempre copiar o código e colar no script.
+
+
+### O que são objetos?
+
+Tudo no R é um objeto, por exemplo o número π:
+
+```{r, eval=TRUE, warning=F, message=F}
+
+pi
+
+```
+
+E as funções também são objetos. Vejamos o exemplo da função sum (SOMA)
+
+```{r, eval=TRUE, warning=F, message=F}
+
+sum(c(2,3,4))
+
+```
+
+E nós podemos criar nós mesmos os nossos objetos utilizando <- 
+Esses objetos ficarão disponíveis no *Global Environment* e, assim, poderemos utiliza-los depois.
+
+```{r, eval=TRUE, warning=F, message=F}
+
+resultado_da_soma <- sum(c(2,3,4))
+resultado_da_soma
+
+```
+
+Ou
+
+```{r, eval=TRUE, warning=F, message=F}
+
+x <- 2
+y <- 3
+z <- 4
+
+x+y+z
+
+```
+
+### Tipos ou classes de objetos no R!
+
+**Numeric** São números reais
+
+```{r, eval=TRUE, warning=F, message=F}
+4
+```
+
+**Character**: Vetores tipo texto, escritos entre aspas duplas:
+
+```{r}
+"4"
+```
+
+
+### Armazenando dados
+
+Nesse curso, vamos utilizar duas classes de objetos para armazenar dados:
+
+**Vetor** : e uma sequencia de objetos da mesma classe (numérico, character, data):
+
+```{r}
+c("Monica", "Rachel", "Ross")
+```
+
+**Dataframe** : é uma matriz, ou seja vetores organizados por colunas. Cada coluna é um vetor de um tipo diferente. Abaixo temos um data frame contendo um vetor (coluna) de texto (Alimento) e três vetores numéricos (Monica, Ross e Rachel).
+
+```{r}
+data.frame(Alimento = c("Bananas", "Pêras", "Cenouras"),
+                  Monica = c(1,2,5),
+                  Ross = c(3, 8, 2),
+                  Rachel= c(5, 7, 0))
+```
+
+
+### Exercício:
+
+1. Crie um objeto contendo um vetor de texto
+2. Crie um segundo objeto contendo um data.frame com dois vetores: um de texto e um numérico.
+
+
+### Bibliotecas
+
+O R! possui algumas funções nativa como, por exemplo, a função sum .
+No entanto, é possível importar novas funções e até mesmo bancos de dados através de bibliotecas. 
+
+Vamos importar os romances da Jane Austen? Para isso, precisamos:
+
+    1. Instalar a biblioteca na nossa máquina com install.packages()
+    2. "Carregar" a biblioteca com library()
+    
+    
+Execute os comandos a seguir:
+
+```{r, eval=F, warning=F, message=F}
+install.packages("janeaustenr")
+library(janeaustenr)
+
+```
+
+Agora você tem acesso aos seis livros da Jane Austen. Vamos dar uma olhada em "Orgulho e Preconceito" ?
+
+```{r, eval=F, warning=F, message=F}
+
+prideprejudice
+
+```
+
+### Exercício
+
+1. Instale e carregue a biblioteca "readr" no seu computador. Lembre-se que o nome dá biblioteca está entre aspas no comando install.packages() e não está entre aspas no comando library.
