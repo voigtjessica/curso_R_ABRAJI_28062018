@@ -38,6 +38,14 @@ for (i in i:32) {
 # Vou exportar como excel para arrumar os erros na mão, 
 # mas foi um grande avanço
 
+setwd("C:\\Users\\jvoig\\OneDrive\\Documentos\\curso_R_ABRAJI_28062018\\bancos")
+
 write.xlsx(as.data.frame(fifa2018),
            file = "fifa2018.xlsx",
-           sheetName="fifa2018")
+           sheetName="fifa2018",
+           row.names = FALSE)
+
+write.xlsx(as.data.frame(treinadores),
+           file = "treinadores.xlsx",
+           sheetName="treinadores",
+           row.names = FALSE)
