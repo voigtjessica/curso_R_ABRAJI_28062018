@@ -131,7 +131,7 @@ $(document).ready(function () {
 <pre><code>1. Conhecer o R;
 2. Importar planilhas em formatos .xlsx (Excel) e .csv no R;
 3. Criar tabelas e visualizações com os verbos do dplyr;
-4. Salvar bancos de dados e exportar planilhas nos diferentes formatos;
+4. Exportar bancos de dados;
 5. Juntar diferentes bancos de dados com o left_join;
 6. Modificar bancos de dados com o pacote tidyr.</code></pre>
 </div>
@@ -173,68 +173,84 @@ $(document).ready(function () {
 <h3>O que são objetos?</h3>
 <p>Tudo no R é um objeto, por exemplo o número π:</p>
 <pre class="r"><code>pi</code></pre>
+<pre><code>## [1] 3.141593</code></pre>
 <p>E as funções também são objetos. Vejamos o exemplo da função sum (SOMA)</p>
-<pre class="r"><code>sum(c(2,3,4))</code></pre>
+<pre class="r"><code>sum(2,3,4)</code></pre>
+<pre><code>## [1] 9</code></pre>
 <p>E nós podemos criar nós mesmos os nossos objetos utilizando &lt;- Esses objetos ficarão disponíveis no <em>Global Environment</em> e, assim, poderemos utiliza-los depois.</p>
-<pre class="r"><code>resultado_da_soma &lt;- sum(c(2,3,4))
+<pre class="r"><code>resultado_da_soma &lt;- sum(2,3,4)
 resultado_da_soma</code></pre>
+<pre><code>## [1] 9</code></pre>
 <p>Ou</p>
 <pre class="r"><code>x &lt;- 2
 y &lt;- 3
 z &lt;- 4
 
 x+y+z</code></pre>
+<pre><code>## [1] 9</code></pre>
 </div>
 <div id="tipos-ou-classes-de-objetos-no-r" class="section level3">
 <h3>Tipos ou classes de objetos no R</h3>
 <p><strong>Numeric</strong> São números reais</p>
 <pre class="r"><code>4</code></pre>
+<pre><code>## [1] 4</code></pre>
 <p><strong>Character</strong>: Vetores tipo texto, escritos entre aspas duplas ou simples:</p>
-<pre class="r"><code>&quot;4&quot;
-`4`</code></pre>
+<pre class="r"><code>&quot;4&quot;</code></pre>
+<pre><code>## [1] &quot;4&quot;</code></pre>
+<pre class="r"><code>'4'</code></pre>
+<pre><code>## [1] &quot;4&quot;</code></pre>
 </div>
 <div id="pacotes" class="section level3">
 <h3>Pacotes</h3>
-<p>O R possui algumas funções nativa como, por exemplo, a função <em>sum()</em> . No entanto, é possível importar novas funções e até mesmo bancos de dados através de pacotes.</p>
+<p>O R possui algumas funções nativa como, por exemplo, a função <em>sum()</em> . No entanto, é possível importar novas funções e até mesmo bancos de dados por meio de pacotes.</p>
 <p>Para a aula de hoje, vamos importar o pacote <em>data.table</em> para usarmos o comando <em>fread</em>, que nos permite importar arquivos .csv de forma mais eficiente. Execute os comandos a seguir:</p>
 <pre class="r"><code># Instalar o pacote na nossa máquina com a função install.packages()
+# Aqui mostramos como comentário porque o pacote já está instalado:
+
 # install.packages(&quot;data.table&quot;) #nome do pacote entre aspas
 
 # Carregar a biblioteca com a função library() 
-library(data.table) #nome da biblioteca sem aspas</code></pre>
-<p>Ótimo. Agora nós temos acesso ao comando <em>fread</em> e podemos importar o nosso banco de dados.</p>
+library(data.table) </code></pre>
+<p>Ótimo. Agora nós temos acesso ao comando <em>fread</em> e podemos importar o nosso banco de dados. Você só precisa carregar a biblioteca uma vez depois de abrir o R e iniciar a sessão.</p>
+<p>É uma prática comum indicar as bibliotecas que serão usadas no início do script, no entanto, longo do curso de hoje faremos um pouco diferente: sempre que utilizarmos um comando que pertence a uma biblioteca, vamos mostrar a biblioteca como um comentário. Vejam o exemplo a seguir (por favor, não rodem):</p>
+<pre class="r"><code>#library(data.table) ou
+#data.table:fread
+idh &lt;- fread(file = &quot;idh.csv&quot;)</code></pre>
 </div>
 </div>
 <div id="importar-planilhas-em-formatos-.xlsx-excel-e-.csv-no-r" class="section level2">
 <h2>2. Importar planilhas em formatos .xlsx (Excel) e .csv no R</h2>
 <p>Agora que já sabemos como importar bibliotecas e como acessar objetos, vamos aprender a importar banco de dados. Vamos trabalhar com o banco de jogadores da fifa de 2018.</p>
-<pre><code>1. Vá em https://goo.gl/XUWoyR e baixe o arquivo &quot;fifa2018.xls&quot; e o arquivo &quot;human_develop_index.csv&quot;;
+<pre><code>1. Vá em https://goo.gl/XUWoyR e baixe o arquivo &quot;fifa2018.xls&quot; e o arquivo &quot;idh.csv&quot;;
 2. Salve os arquivos em uma pasta conhecida.</code></pre>
 <div id="importando-arquivos-em-.csv" class="section level3">
 <h3>Importando arquivos em .csv</h3>
-<p>CSV significa Comma Separated Values, e é um tipod e arquivo para armazenar banco de dados. Nós podemos importar arquivos .csv com o comando fread.</p>
+<p>CSV significa <em>Comma Separated Values</em>, e é um tipo de arquivo para armazenar banco de dados. Nós podemos importar arquivos .csv com o comando <em>fread()</em> , da biblioteca <em>data.table</em>.</p>
 <p>Primeiro, temos que avisar o computador onde está o arquivo que queremos importar. Para isso, cole o caminho onde está o seu arquivo entre aspas dentro da função <em>setwd()</em> . Lembre-se de que no R as barras apontam para a direita “/” como no exemplo abaixo:</p>
-<pre class="r"><code># Definindo o caminho
+<pre class="r"><code># Comandos nativos do R (não precisam de biblioteca)
+
+# Definindo o caminho
 setwd(&quot;C:/Users/jvoig/OneDrive/Documentos/curso_R_ABRAJI_28062018/bancos&quot;)
 
 #Verificando o caminho:
 getwd()</code></pre>
-<p>Agora vamos mostrar como importar o arquivo “human_develop_index.csv” e atribui-lo a um objeto chamado idh:</p>
-<pre class="r"><code># library(data.table)    #você já carregou essa biblioteca
-
+<p>Agora vamos mostrar como importar o arquivo “idh.csv” e atribui-lo a um objeto chamado idh:</p>
+<pre class="r"><code># library(data.table)   
+# Importar arquivo .csv
 idh &lt;- fread(file = &quot;idh.csv&quot;)
 
+# Comando nativo
 # Abre em uma outra janela o dataframe
 View(idh)</code></pre>
 <p>Por enquanto vamos deixar esse banco de lado. Voltaremos nele mais pra frente.</p>
 </div>
 <div id="importando-arquivos-em-excel-.xls" class="section level3">
 <h3>Importando arquivos em excel .xls</h3>
-<p>Agora vamos importar o arquivo. Para isso, vamos usar a função <em>read_excel</em> do pacote <em>readxl</em> por meio dos comandos disponíveis na interface do R Studio. A vantagem de importar arquivos excel dessa forma é poder verificar como cada coluna será importada e alterar, se necessário.</p>
-<pre><code>Vá em *File &gt;&gt; Import Datasets &gt;&gt; from Excel*</code></pre>
-<p>Algumas colunas estão corretamente classificadas como character, mas outras terão de ser alteradas antes de importadas. As colunas height, caps e goals estão como character, mas deveriam estar como numeric. Clique na seta ao lado do nome de cada coluna e mude a sua classe.</p>
+<p>Agora vamos importar o arquivo. Para isso, vamos usar a função <em>read_excel()</em> do pacote <em>readxl</em> por meio dos comandos disponíveis na interface do R Studio. A vantagem de importar arquivos excel dessa forma é poder verificar como cada coluna será importada e alterá-las, se necessário.</p>
+<pre><code>Vá em *File &gt;&gt; Import Datasets &gt;&gt; from Excel &gt;&gt; Browse*</code></pre>
+<p>Algumas colunas estão corretamente classificadas como character(texto), mas outras terão de ser alteradas antes de importadas. As colunas “height”, “caps” e “goals” estão como character, mas deveriam estar como numeric. Clique na seta ao lado do nome de cada coluna e mude a sua classe.</p>
 <p>Você poderá perceber que o código descrito no canto inferior direito irá se modificar conforme você vai alterando a classe das colunas. Após alterar a classe dessas três colunas, copie o código e clique em <em>import</em> . Por fim, cole o código no seu script para registro. Ele estará parecido com o código abaixo:</p>
-<pre class="r"><code># Importando a biblioteca readxl
+<pre class="r"><code># Carregando a biblioteca readxl
 library(readxl)
 
 # Importando o dataframe e atribuindo ao objeto fifa2018
@@ -253,31 +269,42 @@ View(fifa2018)</code></pre>
 <h2>3. Criar tabelas e visualizações com os verbos do dplyr</h2>
 <p>Se o R é uma linguagem, o dplyr é uma lista de verbos que nos permite “conversar” com a máquina de maneira mais eficaz. Durante o curso de hoje, vamos aprender a analisar dados utilizando os verbos do dplyr.</p>
 <p>Primeiro vamos instalar e carregar a biblioteca:</p>
-<pre class="r"><code>install.packages(&quot;dplyr&quot;)
-
+<pre class="r"><code># install.packages(&quot;dplyr&quot;)
+# Esse pacote já foi instalado no computador.
 library(dplyr)</code></pre>
 <p>O dplyr possui um verbo próprio para verificar a base de dados, o <em>glimpse()</em> . Você pode utilizar em conjunto com os comandos acima. Com o glimpse, podemos conferir o nome, classe e as primeiras entradas de um data.frame.</p>
-<pre class="r"><code>glimpse(fifa2018)</code></pre>
+<pre class="r"><code>#library(dplyr)
+
+# &quot;olhar&quot; o dataframe
+glimpse(fifa2018)</code></pre>
 <div id="caps-e-o-numero-de-partidas-feitas-com-a-camisa-da-selecao" class="section level6">
 <h6>*Caps é o número de partidas feitas com a camisa da seleção</h6>
 <p>Saber qual é a class da variável é algo muito útil futuramente, quando juntarmos duas tabelas (join).</p>
+</div>
+<div id="o-pipe" class="section level3">
+<h3>O Pipe %&gt;%</h3>
+<p>No pacote dplyr usamos o comando <em>pipe</em> %&gt;%, que simula uma corrente que amarra um comando ao comando seguinte. Dessa forma, só precisamos indicar uma vez com qual dataframe estamos tabalhando. Em português, poderíamos ler o <em>pipe</em> como “então”.</p>
 </div>
 <div id="criando-novas-variaveis" class="section level3">
 <h3>Criando novas variáveis</h3>
 <p>Para criar novas colunas ou sobrescrever uma coluna em um dataframe, utilizamos o verbo <em>mutate()</em>.</p>
 <p>Se quisessemos dizer que todas essas linhas se referem a jogos de futebol, poderiamos criar uma nova coluna que indicasse o esporte:</p>
-<pre class="r"><code>fifa2018_1 &lt;- fifa2018 %&gt;%  # O Pipe %&gt;% mostra que o comando ainda não acabou 
-  mutate(esporte = &quot;futebol&quot;)  
+<pre class="r"><code># dplyr:mutate
+
+fifa2018_1 &lt;- fifa2018 %&gt;%  # Pegue o fifa2018 e atribua ao objeto fifa2018_1, então
+  mutate(esporte = &quot;futebol&quot;)  # Crie uma váriável chamada esporte com o valor &quot;futebol&quot;
 
 glimpse(fifa2018_1)</code></pre>
 <p>Pronto, criamos uma coluna “esporte” com o valor único “futebol”.</p>
-<p>Agora, digamos que vocês estão elaborando as estatísticas dos jogadores antes da copa. Com essas informações da Fifa, seria interessante saber qual é a média de gols por jogador com a camisa da seleção. Para isso vamos criar uma nova coluna que divide o número de gols (goals) pelo número de jogos pela seleção (caps).</p>
+<p>Agora, digamos que vocês estão elaborando as estatísticas dos jogadores antes da copa. Com essas informações da Fifa, seria interessante saber qual é a média de gols por jogador com a camisa da sua seleção. Para isso vamos criar uma nova coluna que divide o número de gols (goals) pelo número de jogos pela seleção (caps).</p>
 <pre class="r"><code>fifa2018_1 &lt;- fifa2018 %&gt;% 
   mutate(media_gols = goals/caps)
 
 glimpse(fifa2018_1)</code></pre>
 <p>Essa média ficou muito grande, não acham? Podemos controlar o número de casas decimais (no R representados pelo .) utilizando o <em>round()</em>, que arredonda números ou resultados de contas :</p>
-<pre class="r"><code># Testando:
+<pre class="r"><code>#nativo:round
+
+# Testando:
 round(4.567899765 , 1) #uma casa decimal
 round(4.567899765 , 3) #três casas decimais
 
@@ -287,13 +314,17 @@ fifa2018_1 &lt;- fifa2018 %&gt;%
 
 glimpse(fifa2018_1)</code></pre>
 <p>Melhor, não?</p>
-<p>O mutate pode ser usado tanto para criar uma nova variável completamente nova quanto para sobreescrever variáveis que já existem. Vejamos um primeiro exemplo: a altura dos jogadores está em cm, que tal se ela estivesse em metros? Basta sobrescrever:</p>
+<p>O mutate pode ser usado tanto para criar uma nova variável completamente nova quanto para sobreescrever variáveis que já existem.</p>
+<p>Vejamos um exemplo: a altura dos jogadores está em cm, que tal se ela estivesse em metros? Basta sobrescrever:</p>
 <pre class="r"><code>fifa2018_1 &lt;- fifa2018 %&gt;%  
   mutate(height = (height/100))
 
 glimpse(fifa2018_1)</code></pre>
-<p>O mutate também pode mudar apenas a classe da variável. Lembra de como nós mudamos as variáveis height, caps e goals de <em>character</em> para <em>numeric</em> ? Poderíamos ter feito isso também com o mutate. Vejamos primeiro como podemos transformar a classe de vetores:</p>
-<pre class="r"><code># Exemplo
+<p>O mutate também pode mudar apenas a classe da variável. Lembra de como nós mudamos as variáveis “height”, “caps” e “goals” de character para numeric ? Poderíamos ter feito isso também com o mutate. Vejamos primeiro como podemos transformar a classe de vetores:</p>
+<pre class="r"><code>#nativo: as.numeric
+#nativo: as.character
+
+# Exemplo
 
 vetor_texto &lt;- c(&quot;22&quot;, &quot;23&quot;, &quot;24&quot;)        #criando o vetor
 class(vetor_texto)                        #verificando a classe do vetor 
@@ -306,7 +337,11 @@ class(vetor_texto)
 vetor_texto &lt;- as.character(vetor_texto)
 class(vetor_texto)</code></pre>
 <p>Viram? Com as funções nativas do R <em>as.numeric()</em> e <em>as.character()</em> podemos transformar um objeto de uma classe em outra.</p>
-<p>Agora vamos fazer um exercício no dafatrame da fifa. Vamos transformar a coluna goals em character e depois sobrescrever o objeto fifa2018_1 e transformar goals em numeric outra vez:</p>
+<p>Agora vamos aplicar o que aprendemos no dafatrame da fifa. Vamos:</p>
+<ol style="list-style-type: decimal">
+<li>Transformar a coluna “goals” em character e atribuir ao objeto fifa2018_1,</li>
+<li>Depois sobrescrever o objeto fifa2018_1 e transformar “goals” em numeric outra vez:</li>
+</ol>
 <pre class="r"><code>fifa2018_1 &lt;- fifa2018 %&gt;%
   mutate(goals = as.character(goals))
 
@@ -322,80 +357,90 @@ glimpse(fifa2018_1)</code></pre>
 <div id="modificando-datas" class="section level3">
 <h3>Modificando datas</h3>
 <p>Vocês devem ter reparado que não mudamos a coluna day_of_birth no momento da importação. Datas costumam ser complicadas e requerem um tratamento especial.</p>
-<p>Assim como <em>as.character()</em> e <em>as.numeric()</em>, nós temos o comando <em>as.Date()</em> - sim, com D maiúsculo - que transforma um vetor em vetor de data. Para isso, temos que mostrar ao R como ele deve ler a data (onde está o dia, o mês e o ano) .</p>
-<p>Entendido isso, aplicar para o mutate fica simples:</p>
-<pre class="r"><code>#Vamos verificar como estão a data no nosso dataframe:
+<p>Assim como <em>as.character()</em> e <em>as.numeric()</em>, nós temos o comando <em>as.Date()</em> - sim, com D maiúsculo - que transforma um vetor em vetor de data. Então, para classificar um vetor ou coluna de texto para data, temos que aplicar o <em>as.Date()</em> e mostrar ao R como ele deve ler a data, em outras palavras indicar o dia, o mês e o ano e qual é o separador usado.</p>
+<p>Vamos ver o <em>as.Date()</em> utilizado junto com o <em>mutate()</em> no exemplo abaixo:</p>
+<pre class="r"><code>#nativo:as.Date
 
+#Vamos verificar como estão a data no nosso dataframe:
 glimpse(fifa2018)
 
-# Agora vamos transformar em data com o mutate:
+# &quot;10.02.1986&quot; -&gt; &quot;%d.%m.%Y&quot;
 
+# Agora vamos transformar em data com o mutate:
 fifa2018_1 &lt;- fifa2018 %&gt;%
   mutate(day_of_birth = as.Date(day_of_birth, format=&quot;%d.%m.%Y&quot;))
 
 glimpse(fifa2018_1)</code></pre>
 <p>Caso queria estudar mais tarde outras transformações em datas, <a href="https://github.com/voigtjessica/curso_R_ABRAJI_28062018/blob/master/vetor_em_datas.rmd">clique aqui</a> .</p>
-<p>Ótimo! Agora vamos aplicar todas as transformações que já fizemos juntas? Para isso, basta “colar” um comando ao outro com o pipe:</p>
+<p>Agora vamos aplicar todas as transformações que já fizemos juntas? Para isso, basta “colar” um comando ao outro com o pipe:</p>
 <pre class="r"><code>fifa2018_1 &lt;- fifa2018 %&gt;%     
   mutate(esporte = &quot;futebol&quot;) %&gt;%                # Esporte = Futebol
   mutate(media_gols = round(goals/caps, 1)) %&gt;%  # Coluna de média de gols por jogos com 1 casa decimal
   mutate(height = (height/100)) %&gt;%              # Altura dos jogadores em metros
-  mutate(day_of_birth = as.Date(day_of_birth, format=&quot;%d.%m.%Y&quot;))  # Convertendo dia do nascimento em data.</code></pre>
-<p>Agora, ficar repetindo o comando (mutate) é muito chato. Lembrem-se: <strong>programadores são preguiçosos</strong>. No dplyr, você pode dizer o comando uma vez e colocar tudo o que diz respeito àquele comando dentro do parenteses. Entào o nosso código ficaria assim:</p>
+  mutate(day_of_birth = as.Date(day_of_birth, format=&quot;%d.%m.%Y&quot;))  # Convertendo dia do nascimento em data.
+
+glimpse(fifa2018_1)</code></pre>
+<p>Agora, ficar repetindo o comando (mutate) é muito chato. Lembrem-se: <strong>programadores são preguiçosos</strong>. No dplyr, você pode dizer o comando uma vez e colocar tudo o que diz respeito àquele comando dentro do parenteses. Então o nosso código ficaria assim:</p>
 <pre class="r"><code>fifa2018_1 &lt;- fifa2018 %&gt;%  
   mutate(esporte = &quot;futebol&quot;,
          media_gols = round(goals/caps , 1),
          height = (height/100),
-         day_of_birth = as.Date(day_of_birth, format=&quot;%d.%m.%Y&quot;))</code></pre>
+         day_of_birth = as.Date(day_of_birth, format=&quot;%d.%m.%Y&quot;))
+
+glimpse(fifa2018_1)</code></pre>
 <p>Mais limpo, não acham? E como não fechamos o parenteses do <em>mutate()</em>, não precisams colocar o pipe para continaur com o código.</p>
 </div>
 <div id="renomeando-variaveis" class="section level3">
 <h3>Renomeando variáveis:</h3>
 <p>Para renomear variáveis, usamos o <em>rename()</em> do pacote dplyr, indicando primeiro o nome novo e depois o nome antigo.</p>
-<p>Importante: o R tem dificuldade em ler nomes com espaços e acentuação. Fora isso, é uma boa prática sempre deixar todas as letras das variáveis como minúsculas para evitar erros na hoa de digitar o código.</p>
-<pre class="r"><code>fifa2018_1 &lt;- fifa2018 %&gt;%
+<p>Importante: o R tem dificuldade em ler nomes com espaços e acentuação. Fora isso, é uma boa prática sempre deixar todas as letras das variáveis como minúsculas para evitar erros na hora de digitar o código.</p>
+<pre class="r"><code>#dplyr:rename
+
+fifa2018_1 &lt;- fifa2018 %&gt;%
   rename(jogos_com_a_selecao = caps) #sem acento e sem espaço</code></pre>
 </div>
 <div id="filtrando-e-re-arranjando" class="section level3">
 <h3>Filtrando e re-arranjando</h3>
-<p>Digamos que nos interessemos em saber qual jogador tem a maior média de gols com a camisa da seleção? Ou que não queremos analisar jogadores sem gols. Como fazer?</p>
-<p>O verbo <em>filter()</em> permite com que selecionemos apenas as entradas (linhas) que nos interessam. Para escrever corretamente, precisamos saber <strong>exatamente</strong> como está escrito aquilo que queremos filtrar. Para isso costumamos usar o glimpse ou o unique.</p>
+<p>Digamos que nos interessemos em saber qual jogador tem a maior média de gols com a camisa da seleção? Ou que não queremos dados de jogadores sem gols. Como fazer?</p>
+<p>O verbo <em>filter()</em> permite com que selecionemos apenas as entradas (linhas) que nos interessam. Para escrever corretamente, precisamos saber <strong>exatamente</strong> como está escrito aquilo que queremos filtrar. Para isso costumamos usar o <em>glimpse()</em> ou o <em>unique()</em>.</p>
 <p>Vamos trabalhar no nosso banco fifa2018_1 . Quais são os times que estão em campo? Para saber os valores únicos dentro de cada coluna, usamos o <em>unique(nomedobanco$nomedacoluna)</em> :</p>
-<pre class="r"><code>unique(fifa2018_1$team)</code></pre>
+<pre class="r"><code>#nativo:unique
+
+unique(fifa2018_1$team)</code></pre>
 <p>Agora que vimos como está escrito, vamos filtrar os resultados para:</p>
-<pre class="r"><code># Brasil:
+<pre class="r"><code>#dplyr:filter
+
+# Brasil:
 brasil &lt;- fifa2018_1 %&gt;%
   filter(team == &quot;Brazil&quot;)
 
-brasil
+glimpse(brasil)
 
 # América do Sul:
 america_do_sul &lt;- fifa2018_1 %&gt;%
   filter(team == &quot;Brazil&quot; | team == &quot;Argentina&quot; | team == &quot;Colombia&quot; | team == &quot;Peru&quot; | team == &quot;Uruguay&quot;)
 
-america_do_sul
+glimpse(america_do_sul)
 
-# Jogadores do Brasil com 2 ou mais  gols:
-
+# Jogadores do Brasil com 2 ou mais gols:
 brasil2 &lt;- fifa2018_1 %&gt;%
   filter(team == &quot;Brazil&quot; &amp; goals &gt;=2)
 
-brasil2
+glimpse(brasil2)
 
-# Jogadores do Irã com mais de 18 anos (nascidos antes de 2000):
-
+# Jogadores do Irã com mais de 20 anos (nascidos antes de 1998):
 ira &lt;- fifa2018_1 %&gt;%
-  filter(team == &quot;IR Iran&quot; &amp; day_of_birth &lt; &quot;2000-01-01&quot;)
+  filter(team == &quot;IR Iran&quot; &amp; day_of_birth &lt; &quot;1998-01-01&quot;)
 
-ira
+glimpse(ira)
+
 # Apenas os jogadores que fizeram gols:
-
 jog_gols &lt;- fifa2018_1 %&gt;%
   filter(goals != 0)
 
-jog_gols</code></pre>
+glimpse(jog_gols)</code></pre>
 <p>Outro modo de selecionar é com o <em>slice()</em>, que fatia a tabela, com o <em>select()</em>, que seleciona algumas colunas e com o <em>arrange()</em> , que ordena as linhas.</p>
-<p>Vamos então selecionar apenas o nome(fifa_display_name) e a seleção(team) e os gols (goals) dos 5 jogadores com a maior número de gols(goals):</p>
+<p>Vamos então selecionar apenas o nome(“fifa_display_name”) e a seleção(“team”) e os gols (“goals”) dos 5 jogadores com a maior número de gols(“goals”):</p>
 <pre class="r"><code>top5 &lt;- fifa2018_1 %&gt;%
   arrange(desc(goals)) %&gt;%                # ordenando os gols em ordem decrescente
   slice(1:5) %&gt;%                          # selecionando as 5 primeiras linhas
@@ -406,18 +451,21 @@ top5</code></pre>
 <div id="tabelas-dinamicas" class="section level3">
 <h3>Tabelas dinâmicas</h3>
 <p>No excel, é normal criarmos tabelas dinâmicas para analisarmos uma planilha. Elas agrupam e somam ou contam as entradas. Vamos aprender como fazer tabelas dinâmicas no R com o <em>group_by()</em> e o <em>summarise()</em> .</p>
-<p>Primeiro, vamos qual é a soma de gols (goals) por time (team) do nosso banco:</p>
+<p>Primeiro, vamos qual é a <strong>soma</strong> de gols (“goals”) por time (“team”) do nosso banco:</p>
 <pre class="r"><code>gols_time &lt;- fifa2018_1 %&gt;%
-  group_by(team) %&gt;%                      # agrupando
-  summarise(gols_feitos = sum(goals))     # somando os valores das linhas
+  group_by(team) %&gt;%                      # agrupando por &quot;team&quot;
+  summarise(gols_feitos = sum(goals))     # somando os valores da coluna &quot;goals&quot;
 
 gols_time</code></pre>
+<p>O <em>summmarise()</em> cria uma nova coluna. O nome é atribuído no momento da criação (“gols_feitos”) e o valor da coluna é a operação que desejamos (<em>sum(goals)</em>) .</p>
 </div>
 <div id="exercicio" class="section level3">
 <h3>Exercício:</h3>
-<ol style="list-style-type: decimal">
-<li>Atribua a um objeto “top_5_times” o banco “fifa2018_1”, depois agrupe a soma de gols por time como acabamos de demonstrar, ordene os gols em ordem decrescente com o <em>arrange()</em> e selecione as 5 primeiras linhas com o <em>slice()</em> .</li>
-</ol>
+<pre><code>1. Atribua a um objeto &quot;top_5_times&quot; o banco &quot;fifa2018_1&quot;, então
+2. Agrupe por time com o group_by(), então
+3. Some o número total de &quot;goals&quot; com o summarise(), então
+4. Ordene os gols em ordem decrescente com o *arrange()*, então 
+5. Selecione as 5 primeiras linhas com o *slice()* .</code></pre>
 <p>Vamos fazer um segundo exemplo com o <em>group_by()</em> e <em>summarise()</em> . Agora vamos ver a altura (height) média dos jogadores por seleçao (team):</p>
 <pre class="r"><code>altura_time &lt;- fifa2018_1 %&gt;%
   group_by(team) %&gt;%                       # agrupando
@@ -442,8 +490,9 @@ numero_jogadores</code></pre>
 
 top_5_cubes</code></pre>
 </div>
-<div id="salvando-o-banco-de-dados" class="section level3">
-<h3>Salvando o banco de dados</h3>
+</div>
+<div id="exportar-bancos-de-dados" class="section level2">
+<h2>4. Exportar bancos de dados;</h2>
 <p>Agora que trabalhamos bastante com o objeto “fifa2018_1”, está na hora de salva-lo para que possamos utiliza-lo na segunda parte da aula. Vamos aprender como salvar um arquivo em formato .Rdata e como exporta-lo como um csv e como uma planilha excel.</p>
 <pre class="r"><code># Tenha certeza que você vai salvar no diretório certo:
 getwd()
@@ -456,8 +505,8 @@ fwrite(fifa2018_1, file=&quot;fifa2018_1.csv&quot;)
 # library(readxl)
 write.xlsx(fifa2018_1, file = &quot;fifa2018_1.xlsx&quot;)</code></pre>
 </div>
-<div id="juntando-duas-tabelas" class="section level3">
-<h3>Juntando duas tabelas</h3>
+<div id="juntar-diferentes-bancos-de-dados-com-o-left_join" class="section level2">
+<h2>5. Juntar diferentes bancos de dados com o left_join;</h2>
 <p>Nós já importamos o banco do idh, mas vamos importar novamente para lembrar?</p>
 <pre class="r"><code># Verificando qual é o diretório que está na memória
 getwd()
@@ -496,7 +545,6 @@ glimpse(copa_idh)</code></pre>
 4. Ordene em ordem decrescente por número de gols com o arrange(desc()) ;
 5. Atribua a um dataframe e abra com o View()</code></pre>
 <p>Chega de brincar de copa. Vamos para o mundo real? Abra o guia da seguinda parte da aula aqui:</p>
-</div>
 </div>
 
 
