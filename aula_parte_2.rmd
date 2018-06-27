@@ -105,9 +105,9 @@ Quais conclusões podemos tirar?
 ***
 > Considerações finais:
 
-Espero que tenham gostado da aula de hoje. Esses tutoriais estarão sempre disponíveis para que vocês possam consultar futuramente e aplicar o que vocês aprenderam aocotidiano de vocês. 
+Espero que tenham gostado da aula de hoje. Esses tutoriais estarão sempre disponíveis para que vocês possam consultar futuramente e aplicar o que vocês aprenderam ao cotidiano de vocês. 
 
-Queria por fim passar algumas dicas para vocês:
+Por fim, algumas dicas:
 
 * Stackoverflow : Caso tenha dúvidas de como funciona um determinado comando ou fazer uma operação, consulte o site https://pt.stackoverflow.com/ . Sempre pergunte mencionando a linguarem que você está utilizando, no caso R .
 * Veja o [Dplyr Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf) para nunca mais errar comandos com o dplyr .
