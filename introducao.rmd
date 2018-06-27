@@ -7,7 +7,7 @@ output: html_document
 
 ## Início
 
-Essa é o tutorial para o curso de R para jornalistas. Ao longo do dia, vocês irão aprender a:
+Essa é o tutorial para o curso de R para jornalistas. Ao longo do dia iremos:
 
     1. Conhecer o R;
     2. Importar planilhas em formatos .xlsx (Excel) e .csv no R;
