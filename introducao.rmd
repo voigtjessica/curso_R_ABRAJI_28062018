@@ -14,7 +14,8 @@ Essa é o tutorial para o curso de R para jornalistas. Ao longo do dia iremos:
     3. Criar tabelas e visualizações com os verbos do dplyr;
     4. Exportar bancos de dados;
     5. Juntar diferentes bancos de dados com o left_join;
-    6. Modificar bancos de dados com o pacote tidyr.
+    6. Trabalhar problemas do mundo real na parte 2;
+    7. Aprender a usar as funções gather() e spread() do tidyr.
 
 
 ## Primeiros passos
