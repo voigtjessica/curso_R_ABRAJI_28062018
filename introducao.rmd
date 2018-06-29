@@ -53,6 +53,9 @@ Na parte inferior direita estão as abas *Files, Plots, Packages, Help e Viewer*
 
 Na parte inferior esquerda está o console, é onde você verá a impressão dos códigos rodados e eventuais mensagens e erros.
 
+### Como iremos trabalhar?
+
+As partes cinzas desse documento são chamadas chunks. Copie e cole os chunks no seu script para executar as operações. Comente no próprio script as suas impressões e como você traduziria esse código para uma linguagem que você entenda. 
 
 ### Comentários
 
@@ -584,11 +587,14 @@ getwd()
 fwrite(fifa2018_1, file="fifa2018_1.csv")
 
 # Exportando como excel
-# library(readxl)
-write.xlsx(fifa2018_1, file = "fifa2018_1.xlsx")
-
+install.packages("xlsx") #caso você não tenha esse pacote
+library(xlsx)
+write.xlsx(as.data.frame(fifa2018_1), file="fifa2018_1.xlsx", row.names = FALSE)
 ```
 
+**Por que precisamos colocar transformar o fifa2018_1 em dataframe?**, ele já nào era um dataframe? Sim e não. Se imprimirmos o objeto fifa2018_1 (apenas rodar o nome do objeto) veremos que ele é um objeto *tibble* . este objeto é o equivalente do dplyr ao objeto *dataframe* do R, só que ocupa menos espaço na memoria RAM e, por isso, é mais eficiente. No entanto o comando write.xlsx ainda não aceita tibles, de modo que transformamos o nosso objeto co o *as.data.frame()* .
+
+Já o argumento *row.names = FALSE* indica que nós não queremos que o arquivo excel tenha uma coluna numerando as linhas. No default, esse comando criaria uma coluna a mais.
 
 ## 5. Juntar diferentes bancos de dados com o left_join;
 
@@ -669,7 +675,7 @@ Por fim, vamos fazer um exercício em sala para fixar os conteúdos: Vamos compa
     1. Atribua a um novo objeto o dataframe fifa2018_1, então
     2. Agrupe os times com o group_by e calcule a soma do número de gols por time com o summarise(), então
     3. Junte com o banco do IDH com o comando left_join(), então
-    3. Selecione as colunas "team", "num_gols" e "hdi_rank_2015" com o select(), então 
+    3. Selecione as colunas "team", a coluna nova que você criou com o summarise ea coluna "hdi_rank_2015" com o select(), então 
     4. Ordene em ordem decrescente por número de gols com o arrange(desc()).
     5. Abra  o seu novo objeto com o View()
 
