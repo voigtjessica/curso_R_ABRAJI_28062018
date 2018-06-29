@@ -125,6 +125,8 @@ $(document).ready(function () {
 </div>
 
 
+<div id="aplicando-o-que-aprendemos-ao-mundo-real." class="section level2">
+<h2>6. Aplicando o que aprendemos ao mundo real.</h2>
 <p>Vamos agora trabalhar com um problema real? Vamos comparar o número de abstenções em eleições com a taxa do recadastramento biométrico. A ideia aqui é verificar se essas duas variáveis (abstenção e recadastramento) podem estar relacionadas. Vamos utilizar dados das últimas eleições do TSE.</p>
 <pre><code>1. Vá em https://goo.gl/UaLsjz  e baixe os arquivos &quot;biometria.csv&quot; e &quot;comparecimento.csv&quot; ;
 2. Salve em uma pasta conhecida. </code></pre>
@@ -142,9 +144,10 @@ dados_comparecimento &lt;- fread(&quot;comparecimento.csv&quot;)
 glimpse(dados_comparecimento)</code></pre>
 <p>Vamos verificar o grau de abstenções baseado nas eleições municipais do banco dados_comparecimento. Para isso vamos filtrar a DESCRICAO_CARGO = “VEREADOR” e ai juntar com os dados de abstenção.</p>
 <p>Reparem: colocamos o filter, teremos apenas <strong>um município por linha</strong>, de modo que podemos dizer que <strong>cada observação corresponde a um município</strong>.</p>
-<p>Por fim, vocês puderam ver, o “NOME_MUNICIPIO” no banco dados_comparecimento está em caixa alta e acentuada, o que para o R significa dizer que é diferente do que está na coluna “municipio” do banco biometria_dados. Então, vamos ter que sobrescrever a coluna NOME_MUNICÍPIO com valores em caixa-baixa e sem acento. Para isso utilizaremos o <em>mutate()</em> junto com as funções nativas <em>tolower()</em> e <em>iconv()</em>. Só então poderemos usar o <em>left_join()</em> para juntarmos os dois bancos:</p>
+<p>Por fim, o “NOME_MUNICIPIO” no banco dados_comparecimento está em caixa alta e acentuada, o que para o R significa dizer que é diferente do que está na coluna “municipio” do banco biometria_dados. Além disso, os município no banco biometria_dados estão separados com _ , e no banco dados_comparecimento não estão. Então, vamos ter que sobrescrever a coluna NOME_MUNICÍPIO com valores em caixa-baixa, sem acento e substituir os espaços por _ . Para isso utilizaremos o <em>mutate()</em> junto com as funções nativas <em>tolower()</em> , <em>iconv()</em> e <em>gsub()</em>e, só então, poderemos usar o <em>left_join()</em> para juntarmos os dois bancos:</p>
 <pre class="r"><code>#nativo:tolower
 #nativo:iconv
+#nativo:gsub
 #dplyr:filter
 #dplyr:mutate
 #dplyr:left_join
@@ -152,10 +155,11 @@ glimpse(dados_comparecimento)</code></pre>
 elec_biometria &lt;- dados_comparecimento %&gt;%
   filter(DESCRICAO_CARGO == &quot;VEREADOR&quot;) %&gt;%
   mutate(NOME_MUNICIPIO = tolower(NOME_MUNICIPIO),
-         NOME_MUNICIPIO = iconv(NOME_MUNICIPIO, to=&quot;ASCII//TRANSLIT&quot;))  %&gt;%
+         NOME_MUNICIPIO = iconv(NOME_MUNICIPIO, to=&quot;ASCII//TRANSLIT&quot;),
+         NOME_MUNICIPIO = gsub(&quot; &quot;, &quot;_&quot;, NOME_MUNICIPIO))  %&gt;%
   left_join(biometria_dados, by=c(&quot;SIGLA_UF&quot; = &quot;uf&quot; , &quot;NOME_MUNICIPIO&quot; = &quot;municipio&quot;))</code></pre>
 <p>O <em>iconv()</em> converte vetores de texto entre diferentes encodings. O que precisamos saber aqui é que quando convertemos para “ASCII//TRANSLIT” estamos, na prática, retirando os acentos.</p>
-<p>Percebam também que o <em>left_join()</em> está juntando os bancos com base em dois critérios: uf e município. Fazemos isso pois existem municípios com o mesmo nome em estados diferentes. Aqui, a ordem faz diferença: <em>primeiro junte por UF e depois veja o nome do município</em></p>
+<p>Percebam também que o <em>left_join()</em> está juntando os bancos com base em dois critérios: uf e município. Fazemos isso pois existem municípios com o mesmo nome em estados diferentes.</p>
 <p>Vamos ver como está o nosso banco agora:</p>
 <pre class="r"><code>glimpse(elec_biometria)</code></pre>
 <p>Percebam que as colunas “data” e “eleitores” estão cheias de colunas vazias (<em>NA</em>) . Por que que isso acontece?</p>
@@ -173,24 +177,79 @@ elec_biometria &lt;- elec_biometria %&gt;%
 <div id="obs-existe-uma-funcao-ifelse-nativa-mas-ela-apresenta-problemas-quando-aplicamos-para-variaveis-de-datas.-por-isso-eu-particularmente-prefiro-o-uso-do-if_else-do-dplyr.-fora-esse-detalhe-as-duas-funcoes-operam-da-mesma-maneira." class="section level6">
 <h6>Obs: existe uma função <em>ifelse()</em> nativa, mas ela apresenta problemas quando aplicamos para variáveis de datas. Por isso, eu particularmente prefiro o uso do <em>if_else()</em> do dplyr. Fora esse detalhe, as duas funções operam da mesma maneira.</h6>
 <p>Agora vamos comparar as abstenções com o recadastramento biométrico. Usando o <em>group_by()</em> vamos agrupar duas variáveis: estado (SIGLA_UF) e a situação do recadastramento (situacao_recadastramento). Depois de agrupadas, vamos obter a média de abstenções (QTD_ABSTENCOES) com o percentual de abstenções em relação à quantidade de pessoas aptas à votar (QTD_APTOS) usando o <em>summarise()</em></p>
-<pre class="r"><code>elec_biometria %&gt;%
+<pre class="r"><code>elec_biometria_final &lt;- elec_biometria %&gt;%
   group_by(SIGLA_UF, situacao_recadastramento) %&gt;%
   summarise(media_abstencoes = mean(QTD_ABSTENCOES),
-            media_perc = round(sum(QTD_ABSTENCOES)/sum(QTD_APTOS), 2))</code></pre>
+            media_perc = round(sum(QTD_ABSTENCOES)/sum(QTD_APTOS), 2))
+
+elec_biometria_final</code></pre>
+<p>Quais conclusões podemos tirar?</p>
+</div>
+</div>
+<div id="tidyr-gather-e-spread" class="section level2">
+<h2>7. Tidyr:: gather() e spread()</h2>
+<p>Por fim, vamos aprender como usar as funções gather() e spread() do pacote tidyr.</p>
+<p>Primeiro, como vocês já sabem, vamos instalar o pacote:</p>
+<pre class="r"><code>#instalando o pacote
+install.packages(&quot;tidyr&quot;)
+
+#ativando a biblioteca
+library(tidyr)</code></pre>
+<p>Agora vamos olhar o objeto elec_biometria_final que acabamos de criar?</p>
+<pre class="r"><code>elec_biometria_final</code></pre>
+<p>Os estados se repetem duas vezes: uma para situação sem recadastro e outra para a situação com recadastro. Talvez não seria melhor que sem recadastro e com recadastro forrem duas colunas, e não linhas, de forma que cada linha (observação) pudesse ser um estado? Podemos ter uma tabela com sigla, média percentual sem recadastro e média percentual com recadastro.</p>
+<p>Podemos “transpor” as linhas para colunas de uma forma segura com o spread() , ou seja, espalhar o que está em uma linha em várias colunas:</p>
+<pre class="r"><code>#tidyr:spread
+
+elec_biometria_final  %&gt;%
+  select(-media_abstencoes) %&gt;%                  #tirando a coluna que não nos interessa
+  spread(situacao_recadastramento, media_perc)   
+#espalhe o que está na coluna situacao_recadastramento em outras colunas, preenchendo com o conteúdo da coluna media_perc.</code></pre>
+<p>Vejam como ficou!</p>
+<p>Vamos fazer esse exemplo novamente, agora utilizando a media_abstencoes para entendermos o que aconteceu:</p>
+<pre class="r"><code>elec_biometria_final  %&gt;%
+  select(-media_perc) %&gt;%                 
+  spread(situacao_recadastramento, media_abstencoes) 
+#espalhe o que está na coluna situacao_recadastramento em outras colunas, preenchendo com o conteúdo da coluna media_abstencoes.</code></pre>
+<p>Agora os números que preenchem as colunas recadastro e ‘sem recadastro’ os valores das abstenções nos estados.</p>
+<p>Vamos agora atribuir a um novo objeto o resultado da nossa primeira operação, aquela que “spredou” a variável situacao_recadastramento e preencheu com os valores da media_perc.</p>
+<pre class="r"><code>tabela &lt;- elec_biometria_final  %&gt;%
+  select(-media_abstencoes) %&gt;%              
+  spread(situacao_recadastramento, media_perc)  </code></pre>
+<p>Digamos então que, depois de usar o nosso objeto tabela, queremos que as colunas recadastro e ‘sem recadastro’ voltem a ser linhas. Para isso, devemos usar o verbo gather().</p>
+<p>Vamos ver primeiro os argumentos dele em português?</p>
+<pre class="r"><code>#tidyr:gather()
+
+# banco %&gt;% 
+#   gather(coluna_que_agrupa_colunas, coluna_que_recebe_valores, coluna1, coluna2)</code></pre>
+<p>O que que isso quer dizer?</p>
+<ol style="list-style-type: decimal">
+<li>O meu primeiro argumento é o banco, mas ele já está dito antes porque usamos o pipe, então podemos omitir;</li>
+<li>O segundo argumento é o nome que eu vou dar a coluna que vai receber as colunas que vou agrupar (<em>key</em>);</li>
+<li>O terceiro argumento e o nome que eu vou dar a coluna que vai receber os valores que originalmente estavam embaixo das colunas que eu agrupei (<em>value</em>);</li>
+<li>O quarto argumento em diante são as colunas que eu vou agrupar.</li>
+</ol>
+<p>Vamos agora olhar esse exemplo na prática?</p>
+<pre class="r"><code>tabela %&gt;%
+  gather(situacao_recadastramento, media_perc, recadastro, `sem recadastro`)
+
+#como a coluna sem recadastro tem um espaço, eu preciso escreve-la com aspas simples ''</code></pre>
+<p>Viram?</p>
+<p>Essa função é muito útil quando o nosso banco está “curto” e precisamos de um banco “longo” para gerar gráficos.</p>
 <hr />
 <blockquote>
 <p>Considerações finais:</p>
 </blockquote>
-<p>Espero que tenham gostado da aula de hoje. Esses tutoriais estarão sempre disponíveis para que vocês possam consultar futuramente e aplicar o que vocês aprenderam aocotidiano de vocês.</p>
-<p>Queria por fim passar algumas dicas para vocês:</p>
+<p>Espero que tenham gostado da aula de hoje. Esses tutoriais estarão sempre disponíveis para que vocês possam consultar futuramente e aplicar o que vocês aprenderam ao cotidiano de vocês.</p>
+<p>Por fim, algumas dicas:</p>
 <ul>
 <li>Stackoverflow : Caso tenha dúvidas de como funciona um determinado comando ou fazer uma operação, consulte o site <a href="https://pt.stackoverflow.com/" class="uri">https://pt.stackoverflow.com/</a> . Sempre pergunte mencionando a linguarem que você está utilizando, no caso R .</li>
 <li>Veja o <a href="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf">Dplyr Cheatsheet</a> para nunca mais errar comandos com o dplyr .</li>
 <li>Caso outras dúvidas sobre a aula de hoje venham a aparecer, escreva para <a href="mailto:jvoigt@transparencia.org.br">jvoigt@transparencia.org.br</a></li>
 </ul>
-</div>
 <div id="ate-a-proxima" class="section level3">
 <h3>Até a próxima!</h3>
+</div>
 </div>
 
 
