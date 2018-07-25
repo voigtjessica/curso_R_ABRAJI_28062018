@@ -57,6 +57,8 @@ elec_biometria <- dados_comparecimento %>%
 
 O *iconv()* converte vetores de texto entre diferentes encodings. O que precisamos saber aqui é que quando convertemos para "ASCII//TRANSLIT" estamos, na prática, retirando os acentos.
 
+Observação: As vezes, por alguma codificação de localidade, o iconv() não funciona. Nesses casos, é possível usar a função stri_trans_general() do pacote "stringi" . Exemplo: NOME_MUNICIPIO = stri_trans_general(NOME_MUNICIPIO, "Latin-ASCII") .
+ 
 Percebam também que o *left_join()* está juntando os bancos com base em dois critérios: uf e município. Fazemos isso pois existem municípios com o mesmo nome em estados diferentes. 
 
 Vamos ver como está o nosso banco agora:
